@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raw Footage - Share Your Unfiltered Moments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #ff4d4d;
+            --dark: #1a1a1a;
+            --light: #f8f8f8;
+            --gray: #e0e0e0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--dark);
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: white;
+        }
+        
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+        
+        nav ul li a i {
+            margin-right: 8px;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1630&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 77, 77, 0.2);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            margin-left: 1rem;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--dark);
+        }
+        
+        /* Content Section */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+        }
+        
+        .section-title span {
+            color: var(--primary);
+        }
+        
+        /* Featured Content */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .content-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .content-media {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .content-media img, .content-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .content-card:hover .content-media img, 
+        .content-card:hover .content-media video {
+            transform: scale(1.1);
+        }
+        
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 77, 77, 0.8);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .content-card:hover .play-icon {
+            opacity: 1;
+        }
+        
+        .play-icon i {
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .content-info {
+            padding: 1.5rem;
+        }
+        
+        .content-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .content-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+        
+        .content-user {
+            display: flex;
+            align-items: center;
+            margin-top: 1rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+        
+        /* Categories */
+        .categories {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0;
+        }
+        
+        .categories-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover, .category-btn.active {
+            background-color: var(--primary);
+        }
+        
+        /* Upload Section */
+        .upload-section {
+            text-align: center;
+            padding: 4rem 0;
+            background-color: white;
+        }
+        
+        .upload-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .upload-box {
+            border: 2px dashed var(--gray);
+            border-radius: 8px;
+            padding: 3rem;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-box:hover {
+            border-color: var(--primary);
+        }
+        
+        .upload-box i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-col h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+        
+        .footer-col ul {
+            list-style: none;
+        }
+        
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-col ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-col ul li a:hover {
+            color: var(--primary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-links a {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .btn-group {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .btn-outline {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            nav.active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#" class="logo">RAW<span>FOOTAGE</span></a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="#featured"><i class="fas fa-fire"></i> Featured</a></li>
+                    <li><a href="#categories"><i class="fas fa-tags"></i> Categories</a></li>
+                    <li><a href="#upload"><i class="fas fa-cloud-upload-alt"></i> Upload</a></li>
+                    <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Share Your Unfiltered Moments</h1>
+            <p>Raw Footage is the platform for authentic vlogs, behind-the-scenes content, and real-life moments. No filters, no edits - just raw reality.</p>
+            <div class="btn-group">
+                <a href="#upload" class="btn">Upload Now</a>
+                <a href="#featured" class="btn btn-outline">Explore Content</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Featured Content -->
+    <section class="container" id="featured">
+        <h2 class="section-title">Featured <span>Content</span></h2>
+        <div class="featured-grid">
+            <!-- Content Card 1 -->
+            <div class="content-card">
+                <div class="content-media">
+                    <video poster="https://images.unsplash.com/photo-1559703248-d505b8a9f224?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1630&q=80">
+                        <source src="#" type="video/mp4">
+                    </video>
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="content-info">
+                    <h3>24 Hours in Tokyo</h3>
+                    <p>A day in the life exploring Tokyo's hidden gems and bustling streets.</p>
+                    <div class="content-meta">
+                        <span><i class="far fa-eye"></i> 12.4K</span>
+                        <span><i class="far fa-heart"></i> 856</span>
+                    </div>
+                    <div class="content-user">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="user-avatar">
+                        <span>TravelWithAlex</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Card 2 -->
+            <div class="content-card">
+                <div class="content-media">
+                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Mountain Landscape">
+                </div>
+                <div class="content-info">
+                    <h3>Sunrise in the Alps</h3>
+                    <p>Capturing the magical moment when the sun touches the mountain peaks.</p>
+                    <div class="content-meta">
+                        <span><i class="far fa-eye"></i> 8.7K</span>
+                        <span><i class="far fa-heart"></i> 1.2K</span>
+                    </div>
+                    <div class="content-user">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="user-avatar">
+                        <span>NatureLover</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Card 3 -->
+            <div class="content-card">
+                <div class="content-media">
+                    <video poster="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
+                        <source src="#" type="video/mp4">
+                    </video>
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="content-info">
+                    <h3>Street Food Challenge</h3>
+                    <p>Trying every street food stall in Bangkok's Chinatown in one night!</p>
+                    <div class="content-meta">
+                        <span><i class="far fa-eye"></i> 24.1K</span>
+                        <span><i class="far fa-heart"></i> 3.4K</span>
+                    </div>
+                    <div class="content-user">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="User" class="user-avatar">
+                        <span>FoodExplorer</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Card 4 -->
+            <div class="content-card">
+                <div class="content-media">
+                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Concert Crowd">
+                </div>
+                <div class="content-info">
+                    <h3>Music Festival Moments</h3>
+                    <p>Raw crowd energy and backstage sneak peeks from Coachella.</p>
+                    <div class="content-meta">
+                        <span><i class="far fa-eye"></i> 15.3K</span>
+                        <span><i class="far fa-heart"></i> 2.1K</span>
+                    </div>
+                    <div class="content-user">
+                        <img src="https://randomuser.me/api/portraits/women/28.jpg" alt="User" class="user-avatar">
+                        <span>FestivalGoer</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Card 5 -->
+            <div class="content-card">
+                <div class="content-media">
+                    <video poster="https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80">
+                        <source src="#" type="video/mp4">
+                    </video>
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="content-info">
+                    <h3>Skatepark Sessions</h3>
+                    <p>Unedited footage from our weekly skate meetups and fails.</p>
+                    <div class="content-meta">
+                        <span><i class="far fa-eye"></i> 9.2K</span>
+                        <span><i class="far fa-heart"></i> 1.5K</span>
+                    </div>
+                    <div class="content-user">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="User" class="user-avatar">
+                        <span>SkateOrDie</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Card 6 -->
+            <div class="content-card">
+                <div class="content-media">
+                    <img src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1511&q=80" alt="Night Sky">
+                </div>
+                <div class="content-info">
+                    <h3>Stargazing in the Desert</h3>
+                    <p>Time-lapse of the Milky Way with no light pollution.</p>
+                    <div class="content-meta">
+                        <span><i class="far fa-eye"></i> 7.8K</span>
+                        <span><i class="far fa-heart"></i> 987</span>
+                    </div>
+                    <div class="content-user">
+                        <img src="https://randomuser.me/api/portraits/women/33.jpg" alt="User" class="user-avatar">
+                        <span>StarChaser</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <h2 class="section-title">Browse <span>Categories</span></h2>
+            <div class="categories-container">
+                <button class="category-btn active">All</button>
+                <button class="category-btn">Travel</button>
+                <button class="category-btn">Food</button>
+                <button class="cate
